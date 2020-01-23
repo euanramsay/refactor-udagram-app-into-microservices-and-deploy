@@ -36,6 +36,7 @@ You should now be able to go to `http://localhost:8100/home` in your browser and
 
 To remove the docker containers `docker-compose down`
 
+
 ## Updating the docker images
 
 If changes are made to source files, the docker images in the docker hub repository can be updated.
@@ -45,6 +46,7 @@ From the `/udacity-c3-deployment/docker` directory run `docker-compose -f docker
 You will need to update the `image:` in the `docker-compose-build.yaml` with your own repository names, where you have push access.
 
 You can then update the images being pulled in the `docker-compose.yaml` with your own repositories.
+
 
 ## Running in Kubernetes on AWS
 
@@ -68,6 +70,7 @@ https://github.com/scheeles/cloud-developer/tree/06-ci/course-03/exercises/udaci
 The following guide contains detailed steps on how to use Terraform to set up your AWS EC2 instances with three control planes and a Kubernetes cluster.
 
 https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md
+
 
 ## Using Travis CI tool
 

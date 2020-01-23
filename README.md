@@ -55,6 +55,16 @@ You will need to set the following local environment variables:
   $AWS_ACCESS_KEY_ID
   $AWS_SECRET_ACCESS_KEY
 
+You will need to add the following files to the `udacity-cd-deployment/k8s` directory:
+
+aws-secret.yaml
+env-config.yaml
+env-secret.yaml
+
+templates for these files can be found in this repository:
+
+https://github.com/scheeles/cloud-developer/tree/06-ci/course-03/exercises/udacity-c3-deployment/k8s
+
 The following guide contains detailed steps on how to use Terraform to set up your AWS EC2 instances with three control planes and a Kubernetes cluster.
 
 https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md

@@ -1,53 +1,86 @@
-# Udagram Image Filtering Microservice
+# Udagram App On AWS
 
-Udagram is a simple cloud application developed alongside the Udacity Cloud Engineering Nanodegree. It allows users to register and log into a web client, post photos to the feed, and process photos using an image filtering microservice.
+Udagram is a simple cloud application developed alongside the Udacity Cloud Engineering Nanodegree. It allows users to register and log into a web client, post photos to the feed, and process photos using an image filtering microservice. 
 
-The project is split into three parts:
-1. [The Simple Frontend](/udacity-c3-frontend)
-A basic Ionic client web application which consumes the RestAPI Backend. 
-2. [The RestAPI Feed Backend](/udacity-c3-restapi-feed), a Node-Express feed microservice.
-3. [The RestAPI User Backend](/udacity-c3-restapi-user), a Node-Express user microservice.
+It can be run locally and also on a Kubernetes cluster, on AWS.
 
-## Getting Setup
+The app consists of two back-end Nodejs services - /udacity-c3-restapi-feed and /udacity-c3-restapi-user
+and a front end ionic service - udacity-c3-frontend
 
-> _tip_: this frontend is designed to work with the RestAPI backends). It is recommended you stand up the backend first, test using Postman, and then the frontend should integrate.
+## Running locally
 
-### Installing Node and NPM
-This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (NPM is included) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
+You will need to have:
 
-### Installing Ionic Cli
-The Ionic Command Line Interface is required to serve and build the frontend. Instructions for installing the CLI can be found in the [Ionic Framework Docs](https://ionicframework.com/docs/installation/cli).
+1. docker https://docs.docker.com/install/ , Nodejs https://nodejs.org/en/ and ionic https://ionicframework.com/docs/installation/cli installed.
 
-### Installing project dependencies
+2. an AWS account https://aws.amazon.com/ and a PostgreSQL RDS instance set up to save user sign on information. You will also need an S3 bucket set up on AWS to store the image files.
 
-This project uses NPM to manage software dependencies. NPM Relies on the package.json file located in the root of this repository. After cloning, open your terminal and run:
-```bash
-npm install
-```
->_tip_: **npm i** is shorthand for **npm install**
+3. the following local environment variables set:
 
-### Setup Backend Node Environment
-You'll need to create a new node server. Open a new terminal within the project directory and run:
-1. Initialize a new project: `npm init`
-2. Install express: `npm i express --save`
-3. Install typescript dependencies: `npm i ts-node-dev tslint typescript  @types/bluebird @types/express @types/node --save-dev`
-4. Look at the `package.json` file from the RestAPI repo and copy the `scripts` block into the auto-generated `package.json` in this project. This will allow you to use shorthand commands like `npm run dev`
+  $POSTGRESS_USERNAME
+  $POSTGRESS_PASSWORD 
+  $POSTGRESS_DB 
+  $POSTGRESS_HOST 
+  $AWS_REGION 
+  $AWS_PROFILE 
+  $AWS_BUCKET
+  $JWT_SECRET
+
+From the main directory `cd udacity-c3-deployment/docker`
+
+To run the docker compose file `docker-compose up`
+
+This will start the backend-feed and backed-user services, as well as a reverese proxy, along with the font-end.
+
+You should now be able to go to `http://localhost:8100/home` in your browser and see the application running.
+
+To remove the docker containers `docker-compose down`
+
+## Updating the docker images
+
+If changes are made to source files, the docker images in the docker hub repository can be updated.
+
+From the `/udacity-c3-deployment/docker` directory run `docker-compose -f docker-compose-build.yaml push`
+
+You will need to update the `image:` in the `docker-compose-build.yaml` with your own repository names, where you have push access.
+
+You can then update the images being pulled in the `docker-compose.yaml` with your own repositories.
+
+## Running in Kubernetes on AWS
+
+You will need to have Terraform https://www.terraform.io/downloads.html and KubeOne https://github.com/kubermatic/kubeone/blob/master/README.md installed
+
+You will need to set the following local environment variables:
+
+  $AWS_ACCESS_KEY_ID
+  $AWS_SECRET_ACCESS_KEY
+
+You will need to add the following files to the `udacity-cd-deployment/k8s` directory:
+
+aws-secret.yaml
+env-config.yaml
+env-secret.yaml
+
+templates for these files can be found in this repository:
+
+https://github.com/scheeles/cloud-developer/tree/06-ci/course-03/exercises/udacity-c3-deployment/k8s
+
+The following guide contains detailed steps on how to use Terraform to set up your AWS EC2 instances with three control planes and a Kubernetes cluster.
+
+https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md
+
+## Using Travis CI tool
+
+The app is set up with Travis CI https://travis-ci.org/ on this GitHub repository.
+
+With the app running on a Kubernetes cluster on AWS, changes pushed to this repository will run a Travis build, creating a new build and pushing it to production.
 
 
-### Configure The Backend Endpoint
-Ionic uses enviornment files located in `./src/enviornments/enviornment.*.ts` to load configuration variables at runtime. By default `environment.ts` is used for development and `enviornment.prod.ts` is used for produciton. The `apiHost` variable should be set to your server url either locally or in the cloud.
 
-***
-### Running the Development Server
-Ionic CLI provides an easy to use development server to run and autoreload the frontend. This allows you to make quick changes and see them in real time in your browser. To run the development server, open terminal and run:
 
-```bash
-ionic serve
-```
 
-### Building the Static Frontend Files
-Ionic CLI can build the frontend into static HTML/CSS/JavaScript files. These files can be uploaded to a host to be consumed by users on the web. Build artifacts are located in `./www`. To build from source, open terminal and run:
-```bash
-ionic build
-```
-***
+
+
+
+
+
